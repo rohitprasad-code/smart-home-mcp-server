@@ -1,0 +1,17 @@
+{
+  "name": "smart-home-mcp-server",
+  "version": "0.1.0",
+  "description": "Smart Home MCP Server using tinytuya",
+  "scripts": {
+    "postinstall": "uv venv && uv pip install -e .[dev]",
+    "start": "uv run smart-home-mcp",
+    "test": "uv run pytest"
+  },
+  "keywords": [
+    "mcp",
+    "tuya",
+    "smart-home"
+  ],
+  "author": "",
+  "license": "ISC"
+}

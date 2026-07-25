@@ -1,0 +1,23 @@
+[project]
+name = "smart-home-mcp-server"
+version = "0.1.0"
+description = "Smart Home MCP Server using tinytuya"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=0.1.0",
+    "tinytuya>=1.14.0",
+    "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+smart-home-mcp = "smart_home_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
