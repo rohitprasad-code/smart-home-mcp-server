@@ -4,7 +4,9 @@ import pytest
 from unittest import mock
 from smart_home_mcp.config import TuyaConfig
 
-def test_tuya_config_default_empty():
+@mock.patch("os.path.exists")
+def test_tuya_config_default_empty(mock_exists):
+    mock_exists.return_value = False
     with mock.patch.dict(os.environ, {}, clear=True):
         config = TuyaConfig()
         assert config.region == "us"

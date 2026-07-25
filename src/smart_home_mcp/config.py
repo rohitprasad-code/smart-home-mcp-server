@@ -22,23 +22,27 @@ class TuyaConfig:
         if devices_env.strip():
             try:
                 parsed = json.loads(devices_env)
-                if isinstance(parsed, list):
+                if isinstance(parsed, list) and len(parsed) > 0:
                     return parsed
             except json.JSONDecodeError:
                 pass
         
-        # Fallback to local config.json if present
-        config_path = os.path.join(os.getcwd(), "config.json")
-        if os.path.exists(config_path):
-            try:
-                with open(config_path, "r") as f:
-                    parsed = json.load(f)
-                    if isinstance(parsed, list):
-                        return parsed
-                    elif isinstance(parsed, dict) and "devices" in parsed:
-                        return parsed["devices"]
-            except (json.JSONDecodeError, OSError):
-                pass
+        # Fallback to local config.json or neighboring lumina snapshot.json if present
+        fallback_paths = [
+            os.path.join(os.getcwd(), "config.json"),
+            os.path.abspath(os.path.join(os.getcwd(), "..", "..", "lumina", "config", "snapshot.json"))
+        ]
+        for config_path in fallback_paths:
+            if os.path.exists(config_path):
+                try:
+                    with open(config_path, "r") as f:
+                        parsed = json.load(f)
+                        if isinstance(parsed, list):
+                            return parsed
+                        elif isinstance(parsed, dict) and "devices" in parsed:
+                            return parsed["devices"]
+                except (json.JSONDecodeError, OSError):
+                    pass
                 
         return []
 
