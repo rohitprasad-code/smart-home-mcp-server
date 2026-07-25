@@ -83,7 +83,7 @@ class TuyaClient:
         except Exception as e:
             return {"error": f"Exception controlling device: {str(e)}"}
 
-    def scan_local_devices(self, maxretry: int = 5) -> Dict[str, Any]:
+    def scan_local_devices(self, maxretry: Optional[int] = None) -> Dict[str, Any]:
         """Scan local subnet for Tuya devices."""
         try:
             devices = tinytuya.deviceScan(verbose=False, maxretry=maxretry)

@@ -76,12 +76,12 @@ def control_device(
     return json.dumps(res, indent=2)
 
 @mcp.tool()
-def scan_local_network(maxretry: int = 5) -> str:
+def scan_local_network(maxretry: Optional[int] = None) -> str:
     """Scan the local subnet (Wi-Fi/LAN) to auto-discover Tuya devices.
     Returns their IP address, ID, and product key if broadcasted.
     
     Args:
-        maxretry: The number of loops to wait to pick up UDP from all devices. Default is 5.
+        maxretry: Optional number of loops to wait to pick up UDP from all devices. If None, uses tinytuya's default timing.
     """
     res = client.scan_local_devices(maxretry=maxretry)
     return json.dumps(res, indent=2)
