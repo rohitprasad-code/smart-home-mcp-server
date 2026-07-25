@@ -46,8 +46,8 @@ async def test_control_device(mock_client):
 async def test_scan_local_network(mock_client):
     mock_client.scan_local_devices.return_value = {"discovered_devices": []}
     
-    content, _ = await mcp.call_tool("scan_local_network", {"timeout": 3})
+    content, _ = await mcp.call_tool("scan_local_network", {"maxretry": 3})
     assert len(content) == 1
     data = json.loads(content[0].text)
     assert "discovered_devices" in data
-    mock_client.scan_local_devices.assert_called_once_with(timeout=3)
+    mock_client.scan_local_devices.assert_called_once_with(maxretry=3)
