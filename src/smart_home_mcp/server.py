@@ -6,9 +6,11 @@ from mcp.server.fastmcp import FastMCP
 from smart_home_mcp.config import TuyaConfig
 from smart_home_mcp.tuya_client import TuyaClient
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging to prevent noisy stdout/stderr logs
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("smart-home-mcp")
+logger.setLevel(logging.WARNING)
+logging.getLogger("tinytuya").setLevel(logging.WARNING)
 
 # Initialize FastMCP Server
 mcp = FastMCP("Smart Home")
