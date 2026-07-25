@@ -59,6 +59,6 @@ def test_scan_cloud_devices_success(mock_cloud_cls, mock_config):
     client = TuyaClient(mock_config)
     res = client.scan_cloud_devices()
 
-    mock_cloud_cls.assert_called_once_with(region="us", apiKey="test_client", apiSecret="test_secret")
+    mock_cloud_cls.assert_called_once_with(apiRegion="us", apiKey="test_client", apiSecret="test_secret")
     assert "cloud_devices" in res
     assert res["cloud_devices"][0]["id"] == "cloud_dev_1"

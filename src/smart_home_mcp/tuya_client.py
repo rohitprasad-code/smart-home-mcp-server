@@ -98,7 +98,7 @@ class TuyaClient:
 
         try:
             cloud = tinytuya.Cloud(
-                region=self.config.region,
+                apiRegion=self.config.region,
                 apiKey=self.config.client_id,
                 apiSecret=self.config.secret
             )
