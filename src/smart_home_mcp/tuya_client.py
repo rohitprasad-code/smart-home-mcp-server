@@ -12,10 +12,15 @@ class TuyaClient:
     def _get_device_instance(self, device_info: Dict[str, Any]) -> tinytuya.Device:
         """Instantiate the correct TinyTuya device class based on type."""
         dev_type = device_info.get("type", "outlet").lower()
+        # Fallback to detect bulb from name
+        if "bulb" in device_info.get("name", "").lower():
+            dev_type = "bulb"
+            
         dev_id = device_info.get("id")
         ip = device_info.get("ip")
         local_key = device_info.get("key")
-        version = float(device_info.get("version", "3.3"))
+        # Snapshot configuration uses "ver" instead of "version"
+        version = float(device_info.get("version", device_info.get("ver", "3.3")))
 
         if dev_type == "bulb":
             dev = tinytuya.BulbDevice(dev_id, ip, local_key)
