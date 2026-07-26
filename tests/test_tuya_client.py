@@ -12,6 +12,7 @@ def mock_config():
     ]
     config.client_id = "test_client"
     config.secret = "test_secret"
+    config.region = "us"
     return config
 
 @mock.patch("tinytuya.OutletDevice")

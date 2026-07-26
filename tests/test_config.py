@@ -17,7 +17,7 @@ def test_tuya_config_default_empty(mock_exists):
 
 def test_tuya_config_from_env():
     env_mock = {
-        "TUYA_API_REGION": "eu",
+        "TUYA_API_REGION": "in",
         "TUYA_API_CLIENT_ID": "client123",
         "TUYA_API_SECRET": "secret456",
         "TUYA_DEVICE_ID": "dev789",
@@ -25,7 +25,7 @@ def test_tuya_config_from_env():
     }
     with mock.patch.dict(os.environ, env_mock, clear=True):
         config = TuyaConfig()
-        assert config.region == "eu"
+        assert config.region == "in"
         assert config.client_id == "client123"
         assert config.secret == "secret456"
         assert config.test_device_id == "dev789"
