@@ -9,10 +9,6 @@ from smart_home_mcp.config import TuyaConfig
 from smart_home_mcp.tuya_client import TuyaClient
 
 def main():
-    print("==================================================")
-    print("STEP 2: Testing Direct Device Local Control...")
-    print("==================================================")
-
     # 1. Initialize configuration and client
     config = TuyaConfig()
     client = TuyaClient(config)

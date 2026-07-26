@@ -1,9 +1,6 @@
 import tinytuya
 
 def main():
-    print("==================================================")
-    print("STEP 1: Scanning local subnet for Tuya devices...")
-    print("==================================================")
     try:
         # deviceScan scans the local subnet using UDP broadcasts
         devices_found = tinytuya.deviceScan(verbose=False)
