@@ -54,7 +54,7 @@ def test_control_bulb_set_brightness(mock_bulb, mock_config):
 @mock.patch("tinytuya.Cloud")
 def test_scan_cloud_devices_success(mock_cloud_cls, mock_config):
     mock_cloud_inst = mock.Mock()
-    mock_cloud_inst.getdevices.return_value = {"result": [{"id": "cloud_dev_1"}]}
+    mock_cloud_inst.getdevices.return_value = [{"id": "cloud_dev_1"}]
     mock_cloud_cls.return_value = mock_cloud_inst
 
     client = TuyaClient(mock_config)

@@ -109,8 +109,10 @@ class TuyaClient:
             )
             # Retrieve all devices registered to the Tuya account
             devices = cloud.getdevices()
-            if isinstance(devices, dict) and "result" in devices:
-                return {"cloud_devices": devices["result"]}
+            if isinstance(devices, list):
+                return {"cloud_devices": devices}
+            elif isinstance(devices, dict) and "Error" in devices:
+                return {"error": devices["Error"]}
             return {"error": f"Cloud returned unexpected format: {devices}"}
         except Exception as e:
             return {"error": f"Cloud fetch failed: {str(e)}"}
