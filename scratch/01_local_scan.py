@@ -1,0 +1,26 @@
+import tinytuya
+
+def main():
+    print("==================================================")
+    print("STEP 1: Scanning local subnet for Tuya devices...")
+    print("==================================================")
+    try:
+        # deviceScan scans the local subnet using UDP broadcasts
+        devices_found = tinytuya.deviceScan(verbose=False)
+        print(f"\nScan complete. Discovered {len(devices_found)} devices:")
+        print("-" * 50)
+        for ip in devices_found:
+            dev = devices_found[ip]
+            name = dev.get("name", "N/A")
+            dev_id = dev.get("id", "N/A")
+            version = dev.get("version", "N/A")
+            print(f"Device Name: {name}")
+            print(f"  IP Address: {ip}")
+            print(f"  Device ID : {dev_id}")
+            print(f"  Version   : {version}")
+            print("-" * 50)
+    except Exception as e:
+        print(f"\nScan failed with error: {str(e)}")
+
+if __name__ == "__main__":
+    main()
