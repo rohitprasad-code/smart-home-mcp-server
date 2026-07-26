@@ -50,4 +50,4 @@ async def test_scan_local_network(mock_client):
     assert len(content) == 1
     data = json.loads(content[0].text)
     assert "discovered_devices" in data
-    mock_client.scan_local_devices.assert_called_once_with(maxretry=None)
+    mock_client.scan_local_devices.assert_called_once_with()
