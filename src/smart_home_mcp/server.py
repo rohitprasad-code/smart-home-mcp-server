@@ -91,6 +91,108 @@ def scan_cloud_devices() -> str:
     res = client.scan_cloud_devices()
     return json.dumps(res, indent=2)
 
+@mcp.tool()
+def register_device(
+    device_id: str,
+    ip: str,
+    key: str,
+    name: str,
+    dev_type: str,
+    version: str,
+    mapping_json: Optional[str] = None
+) -> str:
+    """Register or update a Tuya device configuration.
+    
+    Args:
+        device_id: The ID of the device to register.
+        ip: The local IP address of the device.
+        key: The local key of the device.
+        name: A friendly name for the device.
+        dev_type: The type of the device (e.g. 'bulb' or 'outlet').
+        version: Protocol version (e.g. '3.3' or '3.5').
+        mapping_json: Optional JSON string of DP mappings.
+    """
+    mapping = None
+    if mapping_json:
+        try:
+            mapping = json.loads(mapping_json)
+        except Exception as e:
+            return json.dumps({"error": f"Invalid mapping JSON: {str(e)}"}, indent=2)
+            
+    success = config.register_device(device_id, ip, key, name, dev_type, version, mapping)
+    return json.dumps({"success": success}, indent=2)
+
+@mcp.tool()
+def create_scene(scene_name: str, devices_actions_json: str) -> str:
+    """Create or update a scene with a series of actions across multiple devices.
+    
+    Args:
+        scene_name: Name of the scene (e.g. 'Movie Night').
+        devices_actions_json: JSON string of a list of actions. Example:
+          '[{"device_id": "bulbid", "action": "set_brightness", "brightness": 200}, {"device_id": "plugid", "action": "turn_on"}]'
+    """
+    try:
+        actions = json.loads(devices_actions_json)
+        if not isinstance(actions, list):
+            return json.dumps({"error": "devices_actions_json must be a JSON list of actions."}, indent=2)
+    except Exception as e:
+        return json.dumps({"error": f"Invalid JSON format for actions: {str(e)}"}, indent=2)
+
+    scenes = config.load_scenes()
+    scenes[scene_name] = actions
+    success = config.save_scenes(scenes)
+    return json.dumps({"success": success, "scene": scene_name}, indent=2)
+
+@mcp.tool()
+def activate_scene(scene_name: str) -> str:
+    """Activate a predefined scene, executing all of its control actions in sequence.
+    
+    Args:
+        scene_name: The name of the scene to activate.
+    """
+    scenes = config.load_scenes()
+    if scene_name not in scenes:
+        return json.dumps({"error": f"Scene '{scene_name}' not found."}, indent=2)
+
+    results = []
+    actions = scenes[scene_name]
+    for action_info in actions:
+        if not isinstance(action_info, dict) or "device_id" not in action_info or "action" not in action_info:
+            results.append({"error": "Invalid action format inside scene."})
+            continue
+
+        device_id = action_info["device_id"]
+        action = action_info["action"]
+        kwargs = {k: v for k, v in action_info.items() if k not in ["device_id", "action"]}
+        res = client.control_device(device_id, action, **kwargs)
+        results.append({"device_id": device_id, "action": action, "result": res})
+
+    return json.dumps({"scene": scene_name, "results": results}, indent=2)
+
+@mcp.tool()
+def set_bulb_color_temp(device_id: str, temp_value: int) -> str:
+    """Set the color temperature of a smart bulb (warm-to-cool range 0 to 1000).
+    
+    Args:
+        device_id: The ID or name of the bulb.
+        temp_value: Color temperature integer value from 0 (warm white/yellow) to 1000 (cool white/blue).
+    """
+    res = client.set_bulb_color_temp(device_id, temp_value)
+    return json.dumps(res, indent=2)
+
+@mcp.tool()
+def set_bulb_hsv(device_id: str, h: int, s: int, v: int) -> str:
+    """Set a smart bulb's color using Hue (0-360), Saturation (0-1000), and Value (0-1000) scale.
+    
+    Args:
+        device_id: The ID or name of the bulb.
+        h: Hue component integer (0-360 degrees).
+        s: Saturation component integer (0-1000).
+        v: Value/brightness component integer (0-1000).
+    """
+    res = client.set_bulb_hsv(device_id, h, s, v)
+    return json.dumps(res, indent=2)
+
 def main():
     mcp.run()
 
