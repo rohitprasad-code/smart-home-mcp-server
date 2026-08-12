@@ -2,6 +2,7 @@ import tinytuya
 
 def main():
     try:
+        print("Scanning local subnet...")
         # deviceScan scans the local subnet using UDP broadcasts
         devices_found = tinytuya.deviceScan(verbose=False)
         print(f"\nScan complete. Discovered {len(devices_found)} devices:")

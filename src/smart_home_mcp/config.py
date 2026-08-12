@@ -27,10 +27,13 @@ class TuyaConfig:
             except json.JSONDecodeError:
                 pass
         
-        # Fallback to local config.json or neighboring lumina snapshot.json if present
+        # Fallback to local config directory files, root files, or neighboring lumina snapshot.json
         fallback_paths = [
+            os.path.join(os.getcwd(), "config", "config.json"),
+            os.path.join(os.getcwd(), "config", "devices.json"),
+            os.path.join(os.getcwd(), "config", "snapshot.json"),
             os.path.join(os.getcwd(), "config.json"),
-            os.path.abspath(os.path.join(os.getcwd(), "..", "..", "lumina", "config", "snapshot.json"))
+            os.path.join(os.getcwd(), "devices.json")
         ]
         for config_path in fallback_paths:
             if os.path.exists(config_path):

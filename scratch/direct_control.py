@@ -14,10 +14,10 @@ def main():
     client = TuyaClient(config)
 
     # 2. Specify target device information
-    device_id = "d7e3c7c23647b017d0zdlk"
+    device_id = "d705fbbfeb0eb9ceb6kgli"
     
     # We will try candidate IPs where the device might be active
-    candidate_ips = ["192.168.1.6", "192.168.1.4"]
+    candidate_ips = ["192.168.1.4"]
     
     device_info = config.get_device(device_id)
     if device_info:
