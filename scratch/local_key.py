@@ -52,7 +52,7 @@ def main():
     for dev in cloud_devices:
         dev_id = dev.get("id")
         name = dev.get("name", "Unnamed Device")
-        local_key = dev.get("local_key")
+        local_key = dev.get("local_key") or dev.get("key")
         category = dev.get("category", "default")
         
         # Determine device type
@@ -78,7 +78,7 @@ def main():
 
     # 5. Save to config directory
     try:
-        config_dir = os.path.join(os.getcwd(), "config")
+        config_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config"))
         os.makedirs(config_dir, exist_ok=True)
         
         # Save as config.json, devices.json, and snapshot.json for maximum compatibility
